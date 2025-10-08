@@ -1,4 +1,4 @@
-##Taller CI/CD 
+## Taller CI/CD 
 
 Este es un proyecto de aula en el que construimos una aplicación pequeña dividida en tres partes que se comunican entre sí: una API principal que gestiona usuarios y posts, un microservicio de productos y un microservicio de pedidos que utiliza la información de productos.
 
