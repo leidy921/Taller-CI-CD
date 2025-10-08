@@ -1,26 +1,29 @@
 {
    "name": "taller-ci-cd",
-  "private": true,
-  "workspaces": ["micros/productos", "micros/pedidos"],
-  "scripts": {
-    "start:api": "node src/index.js",
-    "start:productos": "npm --workspace micros/productos start",
-    "start:pedidos": "npm --workspace micros/pedidos start",
-    "test": "npm -ws test --if-present"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
-  },
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "jest": "^29.7.0",
-    "supertest": "^7.0.0"
-  }
+   "private": "true",
+   "workspaces": [
+      "micros/pedidos",
+      "micros/productos"
+   ],
+   "scripts": {
+      "start:api": "node src/index.js",
+      "start:productos": "npm --workspace micros/productos start",
+      "start:pedidos": "npm --workspace micros/pedidos start",
+      "test": "npm -ws test --if-present"
+   },
+   "dependencies": {
+      "cors": "^2.8.5",
+      "express": "^4.19.2",
+      "swagger-jsdoc": "^6.2.8",
+      "swagger-ui-express": "^5.0.1"
+   },
+   "devDependencies": {
+      "eslint": "^8.57.0",
+      "eslint-config-standard": "^17.1.0",
+      "eslint-plugin-import": "^2.29.1",
+      "eslint-plugin-n": "^16.6.2",
+      "eslint-plugin-promise": "^6.1.1",
+      "jest": "^29.7.0",
+      "supertest": "^7.0.0"
+   }
 }
