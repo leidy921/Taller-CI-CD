@@ -1,53 +1,24 @@
 name: CI
-
 on:
-  push:
-    branches: [ Dev-Leidy ]
-  pull_request:
-    branches: [ main, Dev-Leidy ]
+  push: { branches: [ Dev-Leidy ] }
+  pull_request: { branches: [ main, Dev-Leidy ] }
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ micros/pedidos, micros/productos ]  # agrega más rutas si aplica
+        ws: [ micros/pedidos, micros/productos ]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Detectar package.json
-        id: detect
-        run: |
-          if [ -f "${{ matrix.service }}/package.json" ]; then
-            echo "present=true" >> $GITHUB_OUTPUT
-          else
-            echo "::notice title=Skip::No package.json en ${{ matrix.service }}"
-            echo "present=false" >> $GITHUB_OUTPUT
-          fi
-
       - uses: actions/setup-node@v4
-        if: steps.detect.outputs.present == 'true'
         with:
           node-version: '20'
           cache: 'npm'
-          
-      - name: Instalar dependencias
-        if: steps.detect.outputs.present == 'true'
-        working-directory: ${{ matrix.service }}
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci --no-audit --no-fund
-          else
-            npm install
-          fi
-
+          cache-dependency-path: package-lock.json
+      - name: Install (root)
+        run: npm ci --no-audit --no-fund
       - name: Lint
-        if: steps.detect.outputs.present == 'true'
-        working-directory: ${{ matrix.service }}
-        run: npm run lint --if-present
-
+        run: npm run lint -w ${{ matrix.ws }} --if-present
       - name: Test
-        if: steps.detect.outputs.present == 'true'
-        working-directory: ${{ matrix.service }}
-        run: npm test --if-present
-
+        run: npm test -w ${{ matrix.ws }} --if-present
