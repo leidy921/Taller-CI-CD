@@ -1,0 +1,45 @@
+name: CI & CD
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: npm ci --workspaces
+      - name: Lint
+        run: npm run lint --workspace api
+      - name: Test (all workspaces)
+        run: npm test
+
+  cd:
+    if: github.ref == 'refs/heads/main'
+    needs: [ci]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: npm ci --workspaces
+      - name: Build (si aplica)
+        run: echo "No hay build, API Node puro"
+      - name: Desplegar (Render/Netlify vía Webhook)
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "No se configuró DEPLOY_HOOK_URL. Saltando despliegue."
+          else
+            curl -X POST "$DEPLOY_HOOK_URL"
+          fi
